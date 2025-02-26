@@ -30,6 +30,9 @@ function agregaComentario(comentario){
 
 function creaComentario(textoComentario){
     
+    const ahora = new Date();
+    const tiempoFormateado = formatearHora(ahora);
+
     const tituloComentario = document.createElement("h3");
     const cajaComentario = document.createElement("div");
     const parrafoComentario = document.createElement("p");
@@ -44,8 +47,8 @@ function creaComentario(textoComentario){
     
     tituloComentario.textContent = "Anonimo";
     parrafoComentario.textContent = textoComentario;
-    spanFecha.textContent = "";
-    spanHora.textContent = "";
+    spanFecha.textContent = ahora.toLocaleDateString();
+    spanHora.textContent = tiempoFormateado;
     btnEliminarComentario.textContent = "Elimina Comentario";
 
     btnEliminarComentario.addEventListener('click', eliminaComentario);
@@ -55,4 +58,14 @@ function creaComentario(textoComentario){
     cajaComentario.append(tituloComentario, parrafoComentario, contenedorFechaHora, btnEliminarComentario);
 
     return cajaComentario;
+}
+
+function formatearHora(dateObj){
+    let formateoHora = new Intl.DateTimeFormat("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+    });
+
+    return formateoHora.format(dateObj);   
 }
