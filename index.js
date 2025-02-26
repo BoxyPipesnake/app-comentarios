@@ -19,6 +19,11 @@ formulario.addEventListener('submit', (e) => {
 
 })
 
+function eliminaComentario(event){
+    const comentario = event.target.parentElement;
+    comentario.remove();
+}
+
 function agregaComentario(comentario){
     contenedorComentarios.append(comentario);
 }
@@ -41,7 +46,9 @@ function creaComentario(textoComentario){
     parrafoComentario.textContent = textoComentario;
     spanFecha.textContent = "";
     spanHora.textContent = "";
-    btnEliminarComentario.textContent = "Elimina Comentario"
+    btnEliminarComentario.textContent = "Elimina Comentario";
+
+    btnEliminarComentario.addEventListener('click', eliminaComentario);
 
     contenedorFechaHora.append(spanFecha, spanHora);
 
