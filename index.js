@@ -13,11 +13,15 @@ formulario.addEventListener('submit', (e) => {
     if(contenidoComentario === ""){
         console.log("Boton deshabilitado");
     }else {
-        creaComentario(contenidoComentario);
+        agregaComentario(creaComentario(contenidoComentario));
         areaForm.value = "";
     }
 
 })
+
+function agregaComentario(comentario){
+    contenedorComentarios.append(comentario);
+}
 
 function creaComentario(textoComentario){
     
