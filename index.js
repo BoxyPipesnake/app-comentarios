@@ -51,7 +51,7 @@ function creaComentario(textoComentario){
 
     cajaComentario.classList.add('caja-comentario');
     contenedorFechaHora.classList.add('contenedor-fecha-hora')
-    btnEliminarComentario.classList.add("btn-eliminar");
+    btnEliminarComentario.classList.add("btn-eliminar", "button-40");
     
     tituloComentario.textContent = "Anonimo";
     parrafoComentario.textContent = textoComentario;
