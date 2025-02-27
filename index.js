@@ -19,9 +19,13 @@ formulario.addEventListener('submit', (e) => {
 })
 
 function eliminaComentario(event){
-    const comentario = event.target.parentElement;
-    comentario.remove();
+    const confirmacion = confirm("¿Seguro que deseas eliminar el comentario?");
+    if (confirmacion) {
+        const comentario = event.target.parentElement;
+        comentario.remove();
+    }
 }
+
 
 function agregaComentario(comentario){
     contenedorComentarios.append(comentario);
