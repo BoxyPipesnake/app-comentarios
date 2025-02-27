@@ -5,17 +5,16 @@ const btnAgregaComentario = document.getElementById('btn-agregar-comentario');
 
 const contenedorComentarios = document.getElementById('contenedor-comentarios');
 
-
+areaForm.addEventListener('input', () => {
+    btnAgregaComentario.disabled = areaForm.value === "";
+});
 
 formulario.addEventListener('submit', (e) => {
     e.preventDefault();
     const contenidoComentario = areaForm.value;
-    if(contenidoComentario === ""){
-        console.log("Boton deshabilitado");
-    }else {
-        agregaComentario(creaComentario(contenidoComentario));
-        areaForm.value = "";
-    }
+    agregaComentario(creaComentario(contenidoComentario));
+    areaForm.value = "";
+    btnAgregaComentario.disabled = true;
 
 })
 
