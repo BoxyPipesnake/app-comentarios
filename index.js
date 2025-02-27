@@ -3,6 +3,9 @@ const formulario = document.getElementById('formulario');
 const areaForm = document.getElementById('area-comentario');
 const btnAgregaComentario = document.getElementById('btn-agregar-comentario');
 
+const spanContadorComentarios = document.getElementById('contador-comentarios');
+let contadorComentarios = Number(spanContadorComentarios.textContent);
+
 const contenedorComentarios = document.getElementById('contenedor-comentarios');
 
 areaForm.addEventListener('input', () => {
@@ -23,12 +26,14 @@ function eliminaComentario(event){
     if (confirmacion) {
         const comentario = event.target.parentElement;
         comentario.remove();
+        spanContadorComentarios.textContent = --contadorComentarios;
     }
 }
 
 
 function agregaComentario(comentario){
     contenedorComentarios.append(comentario);
+    spanContadorComentarios.textContent = ++contadorComentarios;
 }
 
 function creaComentario(textoComentario){
