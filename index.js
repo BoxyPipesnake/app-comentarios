@@ -46,6 +46,7 @@ function eliminaComentario(event){
 function agregaComentario(comentario){
     contenedorComentarios.append(comentario);
     spanContadorComentarios.textContent = ++contadorComentarios;
+    contadorCaracteres.textContent = `0 / ${maxCaracteres}`;
 }
 
 function creaComentario(textoComentario){
