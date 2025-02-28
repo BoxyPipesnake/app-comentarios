@@ -9,6 +9,8 @@ const maxCaracteres = 280;
 const spanContadorComentarios = document.getElementById('contador-comentarios');
 let contadorComentarios = Number(spanContadorComentarios.textContent);
 
+const contenedorComentarios = document.getElementById('contenedor-comentarios');
+
 
 areaForm.addEventListener('input', () => {
     const caracteresUsados = areaForm.value.length;
