@@ -1,4 +1,3 @@
-
 const formulario = document.getElementById('formulario');
 const areaForm = document.getElementById('area-comentario');
 const btnAgregaComentario = document.getElementById('btn-agregar-comentario');
@@ -9,8 +8,12 @@ const maxCaracteres = 280;
 const spanContadorComentarios = document.getElementById('contador-comentarios');
 let contadorComentarios = Number(spanContadorComentarios.textContent);
 
-const contenedorComentarios = document.getElementById('contenedor-comentarios');
+let comentarios = JSON.parse(localStorage.getItem("comentarios")) || [];
+const usuario = document.getElementById('usuario');
 
+document.addEventListener("DOMContentLoaded", () => {
+    muestraComentarios(comentarios);
+});
 
 areaForm.addEventListener('input', () => {
     const caracteresUsados = areaForm.value.length;
@@ -24,62 +27,75 @@ areaForm.addEventListener('input', () => {
     btnAgregaComentario.disabled = areaForm.value === "";
 });
 
+
 formulario.addEventListener('submit', (e) => {
     e.preventDefault();
     const contenidoComentario = areaForm.value;
-    agregaComentario(creaComentario(contenidoComentario));
+    creaObjComentario(usuario.value, contenidoComentario);
+    muestraComentarios(comentarios);
     areaForm.value = "";
+    usuario.value = "";
+    spanContadorComentarios.textContent = ++contadorComentarios;
+    contadorCaracteres.textContent = `0 / ${maxCaracteres}`;
     btnAgregaComentario.disabled = true;
 
 })
 
-function eliminaComentario(event){
-    const confirmacion = confirm("¿Seguro que deseas eliminar el comentario?");
-    if (confirmacion) {
-        const comentario = event.target.parentElement;
-        comentario.remove();
-        spanContadorComentarios.textContent = --contadorComentarios;
-    }
-}
-
-
-function agregaComentario(comentario){
-    contenedorComentarios.append(comentario);
-    spanContadorComentarios.textContent = ++contadorComentarios;
-    contadorCaracteres.textContent = `0 / ${maxCaracteres}`;
-}
-
-function creaComentario(textoComentario){
-    
+function creaObjComentario(nombreUsuario, textoComentario) {
     const ahora = new Date();
     const tiempoFormateado = formatearHora(ahora);
 
-    const tituloComentario = document.createElement("h3");
-    const cajaComentario = document.createElement("div");
-    const parrafoComentario = document.createElement("p");
-    const contenedorFechaHora = document.createElement("div");
-    const spanFecha = document.createElement("span");
-    const spanHora = document.createElement("span");
-    let btnEliminarComentario = document.createElement("button");
+    let objComentario = {
+        nombre: nombreUsuario,
+        contenidoComentario: textoComentario,
+        fecha: ahora.toLocaleDateString(),
+        hora: tiempoFormateado
+    };
 
-    cajaComentario.classList.add('caja-comentario');
-    contenedorFechaHora.classList.add('contenedor-fecha-hora')
-    btnEliminarComentario.classList.add("btn-eliminar", "button-40");
+    comentarios.push(objComentario);
     
-    tituloComentario.textContent = "Anonimo";
-    parrafoComentario.textContent = textoComentario;
-    spanFecha.textContent = ahora.toLocaleDateString();
-    spanHora.textContent = tiempoFormateado;
-    btnEliminarComentario.textContent = "Elimina Comentario";
-
-    btnEliminarComentario.addEventListener('click', eliminaComentario);
-
-    contenedorFechaHora.append(spanFecha, spanHora);
-
-    cajaComentario.append(tituloComentario, parrafoComentario, contenedorFechaHora, btnEliminarComentario);
-
-    return cajaComentario;
+    localStorage.setItem("comentarios", JSON.stringify(comentarios));
 }
+
+function muestraComentarios(arrComentarios) {
+    const contenedorComentarios = document.getElementById('contenedor-comentarios');
+    contenedorComentarios.innerHTML = "";
+
+    arrComentarios.forEach((comentario, index) => {
+        let nuevoComentario = document.createElement("div");
+        nuevoComentario.classList.add("caja-comentario");
+        nuevoComentario.setAttribute("data-index", index);
+
+        nuevoComentario.innerHTML = `
+            <h3>${comentario.nombre}</h3>
+            <p>${comentario.contenidoComentario}</p>
+            <div class="contenedor-fecha-hora">
+                <span>${comentario.fecha}</span>
+                <span>${comentario.hora}</span>
+            </div>
+            <button class="btn-eliminar button-40">Eliminar</button>
+        `;
+
+        nuevoComentario.querySelector(".btn-eliminar").addEventListener("click", () => {
+            eliminaComentario(index);
+        });
+
+        contenedorComentarios.appendChild(nuevoComentario);
+    });
+}
+
+function eliminaComentario(index) {
+    const confirmacion = confirm("¿Seguro que deseas eliminar el comentario?");
+    if (confirmacion) {
+        comentarios.splice(index, 1);
+        localStorage.setItem("comentarios", JSON.stringify(comentarios));
+
+        spanContadorComentarios.textContent = --contadorComentarios;
+
+        muestraComentarios(comentarios);
+    }
+}
+
 
 function formatearHora(dateObj){
     let formateoHora = new Intl.DateTimeFormat("en-US", {
@@ -89,4 +105,4 @@ function formatearHora(dateObj){
     });
 
     return formateoHora.format(dateObj);   
-}
+}   
