@@ -21,10 +21,15 @@ areaForm.addEventListener('input', () => {
     if (caracteresUsados > maxCaracteres) {
         areaForm.value = areaForm.value.substring(0, maxCaracteres);
     }
-
+    
     contadorCaracteres.textContent = `${areaForm.value.length} / ${maxCaracteres}`;
-
-    btnAgregaComentario.disabled = areaForm.value === "";
+    
+    if (usuario.value !== "" && areaForm.value !== ""){
+        btnAgregaComentario.disabled = false;
+    } else {
+        btnAgregaComentario.disabled = true;
+    }
+    
 });
 
 
