@@ -3,12 +3,22 @@ const formulario = document.getElementById('formulario');
 const areaForm = document.getElementById('area-comentario');
 const btnAgregaComentario = document.getElementById('btn-agregar-comentario');
 
+const contadorCaracteres = document.getElementById('contador-caracteres');
+const maxCaracteres = 280;
+
 const spanContadorComentarios = document.getElementById('contador-comentarios');
 let contadorComentarios = Number(spanContadorComentarios.textContent);
 
-const contenedorComentarios = document.getElementById('contenedor-comentarios');
 
 areaForm.addEventListener('input', () => {
+    const caracteresUsados = areaForm.value.length;
+
+    if (caracteresUsados > maxCaracteres) {
+        areaForm.value = areaForm.value.substring(0, maxCaracteres);
+    }
+
+    contadorCaracteres.textContent = `${areaForm.value.length} / ${maxCaracteres}`;
+
     btnAgregaComentario.disabled = areaForm.value === "";
 });
 

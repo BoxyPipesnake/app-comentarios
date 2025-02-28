@@ -37,6 +37,10 @@ button {
     padding: 1rem;
 }
 
+#contador-caracteres{
+  margin-left: auto;
+}
+
 #btn-agregar-comentario:disabled{
     cursor: auto;
 }
