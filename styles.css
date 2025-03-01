@@ -27,6 +27,9 @@ textarea {
     resize: none;
 }
 
+small {
+  margin-left: auto;
+}
 
 button {
     cursor: pointer;
@@ -39,10 +42,6 @@ button {
     max-width: 800px;
     margin: 0 auto;
     padding: 1rem;
-}
-
-#contador-caracteres{
-  margin-left: auto;
 }
 
 #btn-agregar-comentario:disabled{

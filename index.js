@@ -1,6 +1,11 @@
 const formulario = document.getElementById('formulario');
+const usuario = document.getElementById('usuario');
 const areaForm = document.getElementById('area-comentario');
 const btnAgregaComentario = document.getElementById('btn-agregar-comentario');
+
+// Contadores input tipo texto usuario y el textarea del comentario
+const maxCaracteresUsuario = 10;
+const contadorCaracteresUsuario = document.getElementById('contador-caracteres-usuario');
 
 const contadorCaracteres = document.getElementById('contador-caracteres');
 const maxCaracteres = 280;
@@ -8,12 +13,25 @@ const maxCaracteres = 280;
 const spanContadorComentarios = document.getElementById('contador-comentarios');
 let contadorComentarios = Number(spanContadorComentarios.textContent);
 
+// Parsear nuestro array del localStorage
 let comentarios = JSON.parse(localStorage.getItem("comentarios")) || [];
-const usuario = document.getElementById('usuario');
+
 
 document.addEventListener("DOMContentLoaded", () => {
     muestraComentarios(comentarios);
 });
+
+
+usuario.addEventListener('input', () => {
+    const caracteresUsadosUsuario = usuario.value.length;
+
+    if (caracteresUsadosUsuario > maxCaracteresUsuario) {
+        usuario.value = usuario.value.substring(0, maxCaracteresUsuario);
+    }
+
+    contadorCaracteresUsuario.textContent = `${usuario.value.length} / ${maxCaracteresUsuario}`;
+});
+
 
 areaForm.addEventListener('input', () => {
     const caracteresUsados = areaForm.value.length;
@@ -23,15 +41,16 @@ areaForm.addEventListener('input', () => {
     }
     
     contadorCaracteres.textContent = `${areaForm.value.length} / ${maxCaracteres}`;
-    
-    if (usuario.value !== "" && areaForm.value !== ""){
-        btnAgregaComentario.disabled = false;
-    } else {
-        btnAgregaComentario.disabled = true;
-    }
-    
+
 });
 
+formulario.addEventListener('input', () =>{
+    if(usuario.value === "" || areaForm.value === ""){
+        btnAgregaComentario.disabled = true;
+    } else {
+        btnAgregaComentario.disabled = false;
+    }
+})
 
 formulario.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -42,6 +61,7 @@ formulario.addEventListener('submit', (e) => {
     usuario.value = "";
     spanContadorComentarios.textContent = ++contadorComentarios;
     contadorCaracteres.textContent = `0 / ${maxCaracteres}`;
+    contadorCaracteresUsuario.textContent = `0 / ${maxCaracteresUsuario}`;
     btnAgregaComentario.disabled = true;
 
 })
@@ -57,7 +77,7 @@ function creaObjComentario(nombreUsuario, textoComentario) {
         hora: tiempoFormateado
     };
 
-    comentarios.push(objComentario);
+    comentarios.unshift(objComentario);
     
     localStorage.setItem("comentarios", JSON.stringify(comentarios));
 }
@@ -95,7 +115,9 @@ function eliminaComentario(index) {
         comentarios.splice(index, 1);
         localStorage.setItem("comentarios", JSON.stringify(comentarios));
 
-        spanContadorComentarios.textContent = --contadorComentarios;
+        if (contadorComentarios > 0){
+            spanContadorComentarios.textContent = --contadorComentarios;
+        }
 
         muestraComentarios(comentarios);
     }

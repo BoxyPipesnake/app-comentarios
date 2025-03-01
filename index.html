@@ -15,7 +15,8 @@
         <h1>Seccion Comentarios</h1>
         <form id="formulario">
             <label for="usuario">Nombre Usuario: </label>
-            <input type="text" id="usuario">
+            <input type="text" id="usuario" maxlength="10">
+            <small id="contador-caracteres-usuario">0 / 10</small>
             <label><strong>Agrega un comentario...</strong></label>
             <textarea id="area-comentario" maxlength="280" placeholder="Yo conocí a un sujeto que conocía a otro que conocía otro..."></textarea>
             <small id="contador-caracteres">0 / 280</small>
