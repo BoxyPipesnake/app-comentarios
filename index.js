@@ -2,6 +2,7 @@ const formulario = document.getElementById('formulario');
 const usuario = document.getElementById('usuario');
 const areaForm = document.getElementById('area-comentario');
 const btnAgregaComentario = document.getElementById('btn-agregar-comentario');
+const contenedorComentarios = document.getElementById('contenedor-comentarios');
 
 // Contadores input tipo texto usuario y el textarea del comentario
 const maxCaracteresUsuario = 10;
@@ -10,8 +11,13 @@ const contadorCaracteresUsuario = document.getElementById('contador-caracteres-u
 const contadorCaracteres = document.getElementById('contador-caracteres');
 const maxCaracteres = 280;
 
+
 const spanContadorComentarios = document.getElementById('contador-comentarios');
-let contadorComentarios = Number(spanContadorComentarios.textContent);
+
+// Obtiene la cantidad de comentarios guardados en localStorage o inicia en 0
+let contadorComentarios = JSON.parse(localStorage.getItem("contadorComentarios")) || 0;
+spanContadorComentarios.textContent = contadorComentarios;
+
 
 // Parsear nuestro array del localStorage
 let comentarios = JSON.parse(localStorage.getItem("comentarios")) || [];
@@ -59,7 +65,6 @@ formulario.addEventListener('submit', (e) => {
     muestraComentarios(comentarios);
     areaForm.value = "";
     usuario.value = "";
-    spanContadorComentarios.textContent = ++contadorComentarios;
     contadorCaracteres.textContent = `0 / ${maxCaracteres}`;
     contadorCaracteresUsuario.textContent = `0 / ${maxCaracteresUsuario}`;
     btnAgregaComentario.disabled = true;
@@ -78,12 +83,16 @@ function creaObjComentario(nombreUsuario, textoComentario) {
     };
 
     comentarios.unshift(objComentario);
-    
     localStorage.setItem("comentarios", JSON.stringify(comentarios));
+
+
+    ++contadorComentarios;
+    spanContadorComentarios.textContent = contadorComentarios;
+    localStorage.setItem("contadorComentarios", JSON.stringify(contadorComentarios));
 }
 
+
 function muestraComentarios(arrComentarios) {
-    const contenedorComentarios = document.getElementById('contenedor-comentarios');
     contenedorComentarios.innerHTML = "";
 
     arrComentarios.forEach((comentario, index) => {
@@ -115,8 +124,10 @@ function eliminaComentario(index) {
         comentarios.splice(index, 1);
         localStorage.setItem("comentarios", JSON.stringify(comentarios));
 
-        if (contadorComentarios > 0){
-            spanContadorComentarios.textContent = --contadorComentarios;
+        if (contadorComentarios > 0) {
+            --contadorComentarios;
+            spanContadorComentarios.textContent = contadorComentarios;
+            localStorage.setItem("contadorComentarios", JSON.stringify(contadorComentarios));
         }
 
         muestraComentarios(comentarios);
